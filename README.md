@@ -8,6 +8,23 @@ Note that a general recommendation is to use the Azure Functions based notifier 
 **Contents:**
 - ADF pipeline templates (.zip files)
 
+# Process
+![ADF Notifier process](docs/process.png)
+
+The solution contains the following Azure Data Factory pipelines:
+- add_to_manifest
+- notify_sources
+- notify_manifests
+
+By default, the process is as follows:
+
+1. Source data files are created into a Storage Account Blob Container by an external process (i.e. not Agile Data Engine nor the Notifier). This source data storage account is not part of the Notifier solution and must be managed separately.
+2. A data source specific [storage event trigger](https://docs.microsoft.com/en-us/azure/data-factory/how-to-create-event-trigger?tabs=data-factory) is created in ADF that triggers the **add_to_manifest** pipeline whenever new source data files land in the defined path. Various parameters can be set in the trigger to manage manifest creation for the data source (see the **Parameters** section below).
+3. The **add_to_manifest** pipeline searches for open manifests, creates new ones if needed, and adds file urls as entries. If the **single_file_manifest** is set to **true**, the pipeline also notifies the manifest once the entry is added.
+4. Open manifests are notified (closed) on schedule by the **notify_sources** and **notify_manifests** pipelines. Create triggers with different schedules as needed to trigger notifying of open manifests of sources listed as parameter.
+
+Note that alternatively the pipelines can be called from other pipelines or by any external process.
+
 # Prerequisites
 - Follow [Microsoft documentation](https://docs.microsoft.com/en-us/azure/data-factory/) to create and configure an Azure Data Factory or use an existing one.
 - Configure a [self-hosted integration runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory) that is hosted on a server with a static public outbound IP address (or address range). Provide the IP addresses to the Agile Data Engine support team so they can be allowed. Notify API blocks requests from unknown addresses.
