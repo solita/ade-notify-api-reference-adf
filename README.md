@@ -10,8 +10,8 @@ Note that a general recommendation is to use the Azure Functions based notifier 
 
 # Prerequisites
 - Follow [Microsoft documentation](https://docs.microsoft.com/en-us/azure/data-factory/) to create and configure an Azure Data Factory or use an existing one.
-- Configure a [self-hosted integration runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory) that is hosted on a server with a static public IP address (or address range). Provide the IP addresses to the Agile Data Engine support team.
-- Configure a Key Vault as [linked service](https://docs.microsoft.com/en-us/azure/data-factory/store-credentials-in-key-vault) to the Data Factory if one is not already configured. Add a secret with name **notify-api-key-secret** into the Key Vault. Set the value as the Notify API key secret you have received from Agile Data Engine support.
+- Configure a [self-hosted integration runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory) that is hosted on a server with a static public outbound IP address (or address range). Provide the IP addresses to the Agile Data Engine support team so they can be allowed. Notify API blocks requests from unknown addresses.
+- Configure a Key Vault as a [linked service](https://docs.microsoft.com/en-us/azure/data-factory/store-credentials-in-key-vault) to the Data Factory if one is not already configured. Add a secret with name **notify-api-key-secret** into the Key Vault. Set the value as the Notify API key secret you have received from Agile Data Engine support.
 
 # Deployment
 1. Open Azure Data Factory Studio.
@@ -34,7 +34,7 @@ Edit the settings of each **Web activity** to use the self-hosted integration ru
 | Parameter  | Example value | Description |
 | --- | --- | --- |
 | notify_api_base_url | https://external-api.dev.datahub.s1234567.saas.agiledataengine.com/notify-api | Agile Data Engine tenant & environment specific Notify API base url. |
-| notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch Notify API key secret (notify-api-key-secret) from Key Vault. |
+| notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch the Notify API key secret (notify-api-key-secret) from Key Vault. |
 | source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
 | source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
 | manifest_body | { "format": "CSV", "delim": "COMMA", "skiph": 1 } | Request body in the [create manifest](https://ade.document360.io/v1/docs/create-manifest) API call. Default value is *{}*, i.e. optionally you can leave this unset and configure [file format options](https://ade.document360.io/docs/opt-file-format-options) in the file load in Agile Data Engine. |
@@ -104,6 +104,7 @@ In this example we will create a schedule trigger to notify (close) open manifes
 Steps:
 1. Open the add_to_manifest pipeline, select Add trigger - New/Edit - New.
 2. Set the following settings:
+
 | Setting | Value |
 | --- | --- |
 | Name | daily_0200 |
@@ -113,6 +114,7 @@ Steps:
 | Recurrence | Every 1 Day(s)</br>Hours: 2</br>Minutes: 0 |
 
 3. Set parameter values:
+
 | Parameter | Value |
 | --- | --- |
 | notify_api_base_url | https://external-api.{ENV}.datahub.{YOURTENANT}.saas.agiledataengine.com/notify-api |
