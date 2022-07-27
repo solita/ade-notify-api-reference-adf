@@ -3,6 +3,8 @@ This repository contains a reference solution for notifying incoming source data
 
 **The repository is provided for reference purposes only and the solution may require modifications to fit your use case. Note that this solution is not part of the Agile Data Engine product. Please use at your own caution.**
 
+Note that a general recommendation is to use the Azure Functions based notifier maintained in the [ade-notify-api-reference-azure](https://github.com/solita/ade-notify-api-reference-azure) repository instead of this ADF notifier. The Functions based notifier offers more configurability and generally better performance especially if you have lots of data sources with source files landing frequently. However, if you are already using Azure Data Factory for source data extraction and you are well familiar with it, the ADF notifier could be a good option to get started with.
+
 **Contents:**
 - ADF pipeline templates (.zip files)
 
@@ -25,7 +27,7 @@ Select the Key Vault where you have stored notify-api-key-secret as the linked s
 
 # Configuration
 ## Integration runtime
-Edit the settings of each **Web activity** to use self-hosted integration runtime mentioned in the prerequisites. 
+Edit the settings of each **Web activity** to use the self-hosted integration runtime mentioned in the prerequisites. 
 
 ## Pipeline parameters
 ### add_to_manifest
@@ -64,6 +66,57 @@ See examples below.
 Alternatively you can also trigger the pipelines from other ADF pipelines or outside processes that are e.g. extracting source data from source systems.
 
 ### Example: Blob created trigger for add_to_manifest
+This is an example of a data source specific trigger for the add_to_manifest pipeline. The objective is to trigger the pipeline whenever a new source file is created into a source data container and pass on the required parameters for the pipeline to add that file to a manifest. See also related [ADF documentation](https://docs.microsoft.com/en-us/azure/data-factory/how-to-create-event-trigger?tabs=data-factory).
+
+Steps:
+1. Open the add_to_manifest pipeline, select Add trigger - New/Edit - New.
+2. Set the following settings:
+| Setting | Value |
+| --- | --- |
+| Name | example_source-example_entity |
+| Type | Storage events |
+| Account selection method | From Azure subscription |
+| Azure subscription | your-subscription |
+| Storage account name | yourstorageaccountname |
+| Container name | /yourcontainername/ |
+| Blob path begins with | example_source/example_entity/ |
+| Blob path ends with (optional) | .json |
+| Event | Blob created |
+| Ignore empty blobs | Yes |
+
+3. Set parameter values:
+| Parameter | Value |
+| --- | --- |
+| notify_api_base_url | https://external-api.{ENV}.datahub.{YOURTENANT}.saas.agiledataengine.com/notify-api |
+| notify_api_key | your-api-key-here (Note that notify-api-key-secret is fetched from Key Vault.) |
+| source_system_name | example_source |
+| source_entity_name | example_entity |
+| manifest_body | {"format": "JSON", "fullscanned": false} |
+| manifest_entries_body | [{"sourceFile": "@{triggerBody().folderPath}/@{triggerBody().fileName}"}] |
+| single_file_manifest | false |
+
+4. Publish the changes.
+5. Test the trigger by adding a file to path *yourstorageaccountname/yourcontainername/example_source/example_entity/*.
 
 ### Example: Schedule trigger for notify_sources
+In this example we will create a schedule trigger to notify (close) open manifests for given data sources on a schedule. Note that this is required when the *single_file_manifest* parameter is set to false in the *add_to_manifest* pipeline. Otherwise manifests for the data source will remain open and will not be queued to be loaded by Agile Data Engine.
 
+Steps:
+1. Open the add_to_manifest pipeline, select Add trigger - New/Edit - New.
+2. Set the following settings:
+| Setting | Value |
+| --- | --- |
+| Name | daily_0200 |
+| Type | Schedule |
+| Start date | 1/1/22 00:00:00 |
+| Time zone | UTC |
+| Recurrence | Every 1 Day(s)</br>Hours: 2</br>Minutes: 0 |
+
+3. Set parameter values:
+| Parameter | Value |
+| --- | --- |
+| notify_api_base_url | https://external-api.{ENV}.datahub.{YOURTENANT}.saas.agiledataengine.com/notify-api |
+| notify_api_key | your-api-key-here (Note that notify-api-key-secret is fetched from Key Vault.) |
+| sources | [ {"source_system_name": "example_source", "source_entity_name": "example_entity"},</br>{"source_system_name": "example_source_n", "source_entity_name": "example_entity_n"} ] |
+
+4. Publish the changes and wait for the pipeline to trigger on schedule.
