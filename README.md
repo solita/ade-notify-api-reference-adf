@@ -71,6 +71,7 @@ This is an example of a data source specific trigger for the add_to_manifest pip
 Steps:
 1. Open the add_to_manifest pipeline, select Add trigger - New/Edit - New.
 2. Set the following settings:
+
 | Setting | Value |
 | --- | --- |
 | Name | example_source-example_entity |
@@ -85,6 +86,7 @@ Steps:
 | Ignore empty blobs | Yes |
 
 3. Set parameter values:
+
 | Parameter | Value |
 | --- | --- |
 | notify_api_base_url | https://external-api.{ENV}.datahub.{YOURTENANT}.saas.agiledataengine.com/notify-api |
