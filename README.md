@@ -52,7 +52,7 @@ Edit the settings of each **Web activity** to use self-hosted integration runtim
 | --- | --- | --- |
 | notify_api_base_url | https://external-api.dev.datahub.s1234567.saas.agiledataengine.com/notify-api | Agile Data Engine tenant & environment specific Notify API base url. |
 | notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch Notify API key secret (notify-api-key-secret) from Key Vault. |
-| sources | ```[ {"source_system_name": "example_source", "source_entity_name": "example_entity"}, {"source_system_name": "example_source", "source_entity_name": "example_entity_2"}, {"source_system_name": "example_source_n", "source_entity_name": "example_entity_n"}] ``` | Array of source objects containing values for attributes source_system_name and source_entity_name. Defines which sources will be notified by notify_manifests. |
+| sources | ```[ {"source_system_name": "example_source", "source_entity_name": "example_entity"},<br> {"source_system_name": "example_source", "source_entity_name": "example_entity_2"}, <br> {"source_system_name": "example_source_n", "source_entity_name": "example_entity_n"}] ``` | Array of source objects containing values for attributes source_system_name and source_entity_name. Defines which sources will be notified by notify_manifests. |
 
 ## Triggers
 Configure the following triggers as needed in your use case:
