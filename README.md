@@ -127,7 +127,7 @@ Steps:
 | source_system_name | example_source |
 | source_entity_name | example_entity |
 | manifest_body | {"format": "JSON", "fullscanned": false} |
-| manifest_entries_body | {"sourceFile": "@{triggerBody().folderPath}/@{triggerBody().fileName}"} |
+| manifest_entry_body | {"sourceFile": "@{triggerBody().folderPath}/@{triggerBody().fileName}"} |
 | notify_manifest | false |
 
 4. Publish the changes.
