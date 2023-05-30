@@ -1,5 +1,5 @@
 # Introduction
-This repository contains a reference solution for notifying incoming source data files for Agile Data Engine Notify API (https://ade.document360.io/docs/notify-api) with Azure Data Factory (ADF).
+This repository contains a reference solution for notifying incoming source data files for Agile Data Engine Notify API (https://docs.agiledataengine.com/docs/notify-api-saas) with Azure Data Factory (ADF).
 
 **The repository is provided for reference purposes only and the solution may require modifications to fit your use case. Note that this solution is not part of the Agile Data Engine product. Please use at your own caution.**
 
@@ -58,10 +58,10 @@ Edit the settings of each **Web activity** to use the self-hosted integration ru
 | --- | --- | --- |
 | notify_api_base_url | https://external-api.dev.datahub.s1234567.saas.agiledataengine.com/notify-api | Agile Data Engine tenant & environment specific Notify API base url. |
 | notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch the Notify API key secret (notify-api-key-secret) from Key Vault. |
-| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
-| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
-| manifest_body | { "format": "CSV", "delim": "COMMA", "skiph": 1 } | Request body in the [create manifest](https://ade.document360.io/v1/docs/create-manifest) API call. Default value is *{}*, i.e. optionally you can leave this unset and configure [file format options](https://ade.document360.io/docs/opt-file-format-options) in the file load in Agile Data Engine. |
-| manifest_entry_body | { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob.csv" } | Request body in the [create entry](https://ade.document360.io/docs/create-entry) API call. Allows adding an entry to a manifest. |
+| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
+| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
+| manifest_body | { "format": "CSV", "delim": "COMMA", "skiph": 1 } | Request body in the [create manifest](https://docs.agiledataengine.com/docs/create-manifest-post) API call. Default value is *{}*, i.e. optionally you can leave this unset and configure [file format options](https://docs.agiledataengine.com/docs/opt_file_format_options) in the file load in Agile Data Engine. |
+| manifest_entry_body | { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob.csv" } | Request body in the [create entry](https://docs.agiledataengine.com/docs/create-entry-post) API call. Allows adding an entry to a manifest. |
 | notify_manifest | false | Boolean (true/false), default value is false. If set to true, the manifest is notified (closed) after the entry has been added. |
 
 ### add_entries_to_manifest
@@ -69,17 +69,17 @@ Edit the settings of each **Web activity** to use the self-hosted integration ru
 | --- | --- | --- |
 | notify_api_base_url | https://external-api.dev.datahub.s1234567.saas.agiledataengine.com/notify-api | Agile Data Engine tenant & environment specific Notify API base url. |
 | notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch the Notify API key secret (notify-api-key-secret) from Key Vault. |
-| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
-| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
-| manifest_body | { "format": "CSV", "delim": "COMMA", "skiph": 1 } | Request body in the [create manifest](https://ade.document360.io/v1/docs/create-manifest) API call. Default value is *{}*, i.e. optionally you can leave this unset and configure [file format options](https://ade.document360.io/docs/opt-file-format-options) in the file load in Agile Data Engine. |
-| manifest_entries_body | [ { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob1.csv" }, { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob2.csv" } ] | Request body in the [create multiple entries](https://ade.document360.io/docs/create-multiple-entries) API call. Allows adding one or multiple entries to a manifest. |
+| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
+| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
+| manifest_body | { "format": "CSV", "delim": "COMMA", "skiph": 1 } | Request body in the [create manifest](https://docs.agiledataengine.com/docs/create-manifest-post) API call. Default value is *{}*, i.e. optionally you can leave this unset and configure [file format options](https://docs.agiledataengine.com/docs/opt_file_format_options) in the file load in Agile Data Engine. |
+| manifest_entries_body | [ { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob1.csv" }, { "sourceFile": "https://myaccount.blob.core.windows.net/mycontainer/myblob2.csv" } ] | Request body in the [create multiple entries](https://docs.agiledataengine.com/docs/create-multiple-entries-put) API call. Allows adding one or multiple entries to a manifest. |
 
 ### notify_manifests
 | Parameter  | Example value | Description |
 | --- | --- | --- |
 | notify_api_base_url | https://external-api.dev.datahub.s1234567.saas.agiledataengine.com/notify-api | Agile Data Engine tenant & environment specific Notify API base url. |
-| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
-| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://ade.document360.io/docs/notify-api). |
+| source_system_name | example_source | Source system name defined in the source entity, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
+| source_entity_name | example_entity | Source entity name, see [Agile Data Engine documentation](https://docs.agiledataengine.com/docs/notify-api-saas). |
 | notify_api_key | e8cbca20-0d78-11ed-861d-0242ac120002 | Environment specific Notify API key. Note that the pipelines fetch Notify API key secret (notify-api-key-secret) from Key Vault. |
 
 ### notify_sources
